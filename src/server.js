@@ -21,32 +21,32 @@ const io = socketio(app);
 
 let totalValue = 0;
 
-const onJoined = sock => {
+const onJoined = (sock) => {
   const socket = sock;
 
   socket.on('join', () => {
-    socket.emit('updateNumber', {message: totalValue});
+    socket.emit('updateNumber', { message: totalValue });
 
     socket.join('room1');
   });
 };
 
-const onAddValue = sock => {
+const onAddValue = (sock) => {
   const socket = sock;
 
-  socket.on('addValue', data => {
+  socket.on('addValue', (data) => {
     totalValue += data.message;
-    io.sockets.in('room1').emit('updateNumber', {message: totalValue});
+    io.sockets.in('room1').emit('updateNumber', { message: totalValue });
   });
-}
+};
 
-const onDisconnect = sock => {
+const onDisconnect = (sock) => {
   const socket = sock;
 
   socket.on('disconnect', () => {
     socket.leave('room1');
   });
-}
+};
 
 io.sockets.on('connection', (socket) => {
   console.log('started');
