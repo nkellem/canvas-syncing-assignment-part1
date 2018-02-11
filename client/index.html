@@ -2,12 +2,30 @@
 <html lang="en">
 <head>
     <script src="https://npmcdn.com/babel-core@5.8.38/browser.min.js"></script>
+    <script src="/socket.io/socket.io.js"></script>
     <script type="text/babel" >
         "use strict";
-    
+
+        const init = () => {
+          const socket = io.connect();
+
+          socket.on('connect', () => {
+            socket.emit('join');
+          });
+
+          socket.on('updateNumber', data => {
+            document.querySelector('#numVal').innerHTML = data.message;
+          });
+
+          setInterval(() => {
+            socket.emit('addValue', { message: 5 });
+          }, 5000);
+        };
+
+        window.onload = init;
     </script>
 </head>
 <body>
-
+  <p>The current value is <strong><span id="numVal">0</span></strong>
 </body>
 </html>
